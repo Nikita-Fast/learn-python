@@ -1,6 +1,6 @@
 import pytest
 from PySide6.QtGui import QValidator
-from Source.qt.ipv4_validator import IPv4Validator
+from source.qt.ipv4_validator import IPv4Validator
 
 
 @pytest.mark.parametrize(

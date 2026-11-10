@@ -7,8 +7,8 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QWidget, QLineEdit, QHBoxLayout, QApplication, QLabel, QCheckBox, QGridLayout, \
     QSizePolicy, QPushButton
 
-from Source.qt.ipv4_validator import IPv4Validator
-from Source.qt.switch_widget import SwitchWidget
+from source.qt.ipv4_validator import IPv4Validator
+from source.qt.switch_widget import SwitchWidget
 
 
 class Device:
