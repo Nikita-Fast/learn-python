@@ -1,7 +1,6 @@
 import sys
 
 from PySide6.QtWidgets import QColorDialog
-from jinja2 import Template
 
 from source.qt.settings import Settings
 from source.qt.style_manager import StyleManager
@@ -11,8 +10,9 @@ from source.qt.settings_dialog import SettingsDialog
 
 
 class AppMainWindow(QMainWindow):
-    def __init__(self, /):
+    def __init__(self, settings: Settings, /):
         super().__init__()
+        self._settings = settings
         self._was_maximized = False
         self.setWindowTitle("Базовое Qt-приложение")
         self.setCentralWidget(ContainerWidget())
@@ -42,7 +42,7 @@ class AppMainWindow(QMainWindow):
         menu.addAction(exit_action)
 
     def open_settings(self):
-        dialog = SettingsDialog()
+        dialog = SettingsDialog(self._settings, self)
         ret = dialog.exec()
         print(ret)
 
@@ -107,9 +107,10 @@ if __name__ == '__main__':
     if translator.load(QLocale("ru_RU"), "qtbase", "_", str(translation_path)):
         app.installTranslator(translator)
 
-    StyleManager().apply_style()
+    settings = Settings()
+    StyleManager(settings).apply_style()
 
-    mw = AppMainWindow()
+    mw = AppMainWindow(settings)
     mw.show()
 
     sys.exit(app.exec())

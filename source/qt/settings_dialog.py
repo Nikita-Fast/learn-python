@@ -1,17 +1,14 @@
-from jinja2 import Template
-
-from source.paths import resource_path
 from source.qt.settings import Settings
 from source.qt.style_manager import StyleManager
 from source.qt_imports import *
 
 
 class SettingsDialog(QDialog):
-    def __init__(self, /, parent=None):
+    def __init__(self, settings: Settings, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Настройки")
-        self._settings = Settings()
-        self._style_manager = StyleManager()
+        self._settings = settings
+        self._style_manager = StyleManager(settings)
 
         self._button_box = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok
@@ -47,6 +44,7 @@ class SettingsDialog(QDialog):
 
     def _save_settings(self):
         self._settings.font_size = self._font_size_spin.value()
+        self._settings.sync()
 
     def _apply_settings(self):
         # применение настроек, относящихся к стилю
