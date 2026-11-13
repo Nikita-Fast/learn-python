@@ -66,6 +66,9 @@ class Settings:
             if key.startswith(prefix)
         }
 
+    def default(self, key: str) -> Any:
+        return self._default(key)
+
     @property
     def font_size(self) -> int:
         return int(self.get("style/font_size"))
@@ -73,6 +76,22 @@ class Settings:
     @font_size.setter
     def font_size(self, value: int) -> None:
         self.set("style/font_size", value)
+
+    @property
+    def main_menu_background_color(self) -> str:
+        return str(self.get("style/main_menu_background_color"))
+
+    @main_menu_background_color.setter
+    def main_menu_background_color(self, value: str) -> None:
+        self.set("style/main_menu_background_color", value)
+
+    @property
+    def log_folder(self) -> str:
+        return str(self.get("logging/folder")).strip()
+
+    @log_folder.setter
+    def log_folder(self, value: str) -> None:
+        self.set("logging/folder", value.strip())
 
     def _default(self, key: str) -> Any:
         try:

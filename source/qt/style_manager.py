@@ -1,8 +1,13 @@
+import logging
+
 from jinja2 import Template
 
 from source.paths import resource_path
 from source.qt.settings import Settings
 from source.qt_imports import QApplication
+
+
+logger = logging.getLogger(__name__)
 
 
 class StyleManager:
@@ -15,3 +20,4 @@ class StyleManager:
             style = template.render(**self._settings.get_style_settings())
             app = QApplication.instance()
             app.setStyleSheet(style)
+            logger.debug(f"Стиль приложения успешно применен")

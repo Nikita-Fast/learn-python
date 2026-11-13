@@ -1,12 +1,18 @@
+import logging
 import sys
 
-from PySide6.QtWidgets import QColorDialog
+from PySide6.QtCore import QCoreApplication
 
+from source.qt.logging_setup import (
+    LOG_FORMAT,
+    configure_logging,
+    effective_log_directory,
+)
 from source.qt.settings import Settings
 from source.qt.style_manager import StyleManager
+from source.qt.settings_dialog import SettingsDialog
 from source.qt_imports import *
 from source.paths import resource_path
-from source.qt.settings_dialog import SettingsDialog
 
 
 class AppMainWindow(QMainWindow):
@@ -95,19 +101,37 @@ class ContainerWidget(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
 
-    color = QColorDialog.getColor()
-    if color.isValid():
-        print(color.name())
+    # От этих имён зависит путь QStandardPaths для логов.
+    QCoreApplication.setOrganizationName("Koncentr")
+    QCoreApplication.setApplicationName("DemoApp")
+
+    settings = Settings()
+
+    try:
+        configure_logging(effective_log_directory(settings))
+    except OSError as exc:
+        logging.basicConfig(
+            level=logging.DEBUG,
+            format=LOG_FORMAT,
+            stream=sys.stderr,
+            force=True,
+        )
+        logging.getLogger(__name__).exception(
+            "Не удалось открыть лог-файл: %s", exc
+        )
+
+    logger = logging.getLogger(__name__)
+    logger.info("Расположение логов: %r", effective_log_directory(settings))
 
     # Настройка переводчика на русский язык
     translator = QTranslator()
     translation_path = resource_path("qtbase_ru.qm").parent
+    logger.debug(f"Расположение файла перевода Qt-виджетов на русский язык: {translation_path!r}")
 
     # Загружаем файл переводов базовых модулей Qt
     if translator.load(QLocale("ru_RU"), "qtbase", "_", str(translation_path)):
         app.installTranslator(translator)
 
-    settings = Settings()
     StyleManager(settings).apply_style()
 
     mw = AppMainWindow(settings)
