@@ -1,3 +1,4 @@
 pyside6
 pytest
 numpy
+jinja2

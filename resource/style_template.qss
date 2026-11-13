@@ -1,0 +1,56 @@
+
+
+QLabel {
+    color: #000000;              /* Цвет текста */
+    font-size: {{ font_size }}px;
+    font-weight: 500;            /* Жирность: normal, bold, 100-900 */
+}
+
+/* --- Сама панель меню --- */
+QMenuBar {
+    background-color: {{ main_menu_background_color }};
+    color: #E0E0E0;
+    border-bottom: 1px solid #2A2A2A;
+    padding: 2px;
+}
+
+/* --- Отдельные пункты в панели (Файл, Вид и т.д.) --- */
+QMenuBar::item {
+    background: transparent;
+    padding: 4px 10px;
+    border-radius: 3px;
+}
+
+/* --- Пункт при наведении или выборе --- */
+QMenuBar::item:selected {
+    background-color: #5A5A5A;
+}
+
+/* --- Пункт при нажатии --- */
+QMenuBar::item:pressed {
+    background-color: #0078D7;
+}
+
+/* --- Выпадающее меню (список) --- */
+QMenu {
+    background-color: #3C3C3C;
+    color: #E0E0E0;
+    border: 1px solid #5A5A5A;
+}
+
+/* --- Пункты внутри выпадающего меню --- */
+QMenu::item {
+    padding: 4px 20px;
+}
+
+/* --- Пункт выпадающего меню при наведении --- */
+QMenu::item:selected {
+    background-color: #0078D7;
+}
+
+/* --- Разделитель в меню --- */
+QMenu::separator {
+    height: 1px;
+    background: #5A5A5A;
+    margin: 4px 0px;
+}
