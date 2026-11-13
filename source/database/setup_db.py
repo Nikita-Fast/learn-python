@@ -14,6 +14,7 @@ if __name__ == '__main__':
 
     # temporary RAM-only database
     conn = sqlite3.connect(":memory:", detect_types=sqlite3.PARSE_DECLTYPES)
+    conn.execute("PRAGMA foreign_keys = ON;")
     cursor = conn.cursor()
 
     # Создание схемы базы данных

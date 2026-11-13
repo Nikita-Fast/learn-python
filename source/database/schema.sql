@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS parameters (
      unit TEXT NOT NULL DEFAULT '',
      min_value REAL DEFAULT NULL,
      max_value REAL DEFAULT NULL,
-     validation_type TEXT CHECK (validation_type IN ('range', '<=', '>=', 'none')) DEFAULT 'none'
+     -- Less Than or Equal (<=), Greater Than or Equal (>=), Less Than (<), Greater Than (>)
+     validation_type TEXT CHECK (validation_type IN ('range', 'lte', 'gte', 'lt', 'gt', 'none')) DEFAULT 'none'
 );
 
 
@@ -36,5 +37,31 @@ CREATE TABLE IF NOT EXISTS measurement_channel_configs (
     freq_points NDARRAY,
     -- К-18
     commutations TEXT -- конфигурация реле в формате JSON
+);
+
+
+-- сессии позволяет группировать набор измерений
+CREATE TABLE IF NOT EXISTS measurement_sessions (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE IF NOT EXISTS measurement_results (
+    id INTEGER PRIMARY KEY,
+    -- индентификатор сессии позволяет сгруппировать набор измерений в один отчет
+    session_id INTEGER NOT NULL,
+    parameter_id INTEGER NOT NULL,
+    -- если NULL, значит это весь ППМ, а не конкретный ППСМ
+    ppsm INTEGER,
+    -- значение температуры в град. Цельсия либо NULL, если задание температуры не используется
+    temperature REAL,
+    ppsm_freq_litera INTEGER,
+    result REAL,
+    -- сырые s-параметры, полученные во время измерений. NULL для измерения вроде 'Потребляемый ток'
+    sparam NDARRAY,
+    FOREIGN KEY (parameter_id) REFERENCES parameters (id) ON DELETE RESTRICT,
+    FOREIGN KEY (session_id) REFERENCES measurement_sessions (id) ON DELETE RESTRICT
 );
 
